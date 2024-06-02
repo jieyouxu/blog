@@ -153,7 +153,7 @@ I try to:
     - Some of the answers can become comments in code, in commit messages, which are very useful as
       documentation and not get lost in the PR discussion.
     - This helps to avoid shutting down discussion: I don't want to sound assertive when it doesn't
-      need to that discourages PR authors from contributing their own thoughts/suggestions
+      need to. That discourages PR authors from contributing their own thoughts/suggestions
       (especially new contributors).
     - A simple "what do you think?" can be very powerful! It can make the PR author feel that their
       opinion is valued and their input is desired. They of course are, but an explicit question
