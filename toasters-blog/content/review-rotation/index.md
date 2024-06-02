@@ -48,7 +48,7 @@ different parts of the compiler.
 <center>
     <figure>
         <img src="ferris_clueless.png" width=100px>
-        <figcaption>The `:ferrisClueless:` emote. Taken from the Rust community discord but I could not find its original author.</figcaption>
+        <figcaption>The `:ferrisClueless:` emote. Taken from the Rust community discord, made by @.foobles.</figcaption>
     </figure>
 </center>
 
