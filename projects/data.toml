@@ -1,0 +1,15 @@
+[[project]]
+name = "rust-lang/rust"
+desc = "Empowering everyone to build reliable and efficient software."
+tags = ["rust", "rustc", "compiler"]
+links = [
+    { name = "github", url = "https://github.com/rust-lang/rust" },
+]
+
+[[project]]
+name = "trumank/mint"
+desc = "Deep Rock Galactic mod loader and integration"
+tags = ["deep-rock-galactic", "modding", "rust", "mint"]
+links = [
+    { name = "github", url = "https://github.com/trumank/mint" },
+]

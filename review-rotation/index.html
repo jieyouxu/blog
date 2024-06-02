@@ -1,0 +1,617 @@
+<!doctype html>
+<html class="not-ready lg:text-base" lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title -->
+  <title>
+    A ferrisClueless reviewer - Toaster&#x27;s Blog
+  </title>
+
+  <!-- Meta -->
+  <meta name="theme-color" />
+
+  
+  <!-- Author -->
+  
+  <!---->
+  
+  <meta name="description" content="My experiences being on the rust compiler review rotation for the first time" />
+  <meta name="author" content="A ferrisClueless reviewer" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="A ferrisClueless reviewer" />
+  <meta property="og:site_name" content="Toaster&#x27;s Blog" />
+  <meta property="og:description" content="My experiences being on the rust compiler review rotation for the first time" />
+  <meta property="og:url" content="https:&#x2F;&#x2F;jieyouxu.github.io&#x2F;blog&#x2F;review-rotation&#x2F;" />
+  
+  <!---->
+  
+  <meta property="og:image" content="https://jieyouxu.github.io/blog/icons/github.svg" />
+  
+  <!---->
+  
+
+  <!-- CSS & JS -->
+  <link rel="preload stylesheet" as="style" href="https://jieyouxu.github.io/blog/main.css" />
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --bg-dark: #18181b;
+      --header: #e4e4e7;
+      --header-dark: #27272a;
+    }
+  </style>
+
+  
+
+  <!-- Dark Icon -->
+  <link rel="preload" as="image" href="https://jieyouxu.github.io/blog/icons/theme.svg" />
+
+  <!-- Math -->
+  
+  <!---->
+
+  <!-- Mermaid -->
+  
+  <!---->
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://jieyouxu.github.io/blog/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://jieyouxu.github.io/blog/apple-touch-icon.png" />
+
+  <!-- Feeds -->
+  
+  <!---->
+  
+  <link
+    rel="alternate"
+    type="application/atom+xml"
+    title="Atom"
+    href="https://jieyouxu.github.io/blog/atom.xml"
+  />
+  
+  <!---->
+  
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https:&#x2F;&#x2F;jieyouxu.github.io&#x2F;blog&#x2F;review-rotation&#x2F;" />
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header
+  class="header fixed top-0 z-40 mx-auto min-h-[3.5rem] w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-3 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <a class="text-2xl font-semibold" href="https://jieyouxu.github.io/blog">Toaster&#x27;s Blog</a>
+        <div
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0] [background:url(./icons/theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+          role="button"
+          aria-label="Dark"
+        ></div>
+      </div>
+      
+      <div
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+        role="button"
+        aria-label="Menu"
+      ></div>
+      
+    </div>
+    <script>
+      // base
+      const htmlClass = document.documentElement.classList;
+      setTimeout(() => {
+        htmlClass.remove("not-ready");
+      }, 10);
+
+      // mobile menu
+      const btnMenu = document.querySelector(".btn-menu");
+      btnMenu?.addEventListener("click", () => {
+        htmlClass.toggle("open");
+      });
+
+      // dark theme
+      const setDark = (isDark) => {
+        if (isDark) {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "dark" }));
+          htmlClass.add("dark");
+        } else {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "light" }));
+          htmlClass.remove("dark");
+        }
+        localStorage.setItem("dark", isDark);
+      };
+
+      // init
+      const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+      if (htmlClass.contains("dark")) {
+        setDark(true);
+      } else {
+        const darkVal = localStorage.getItem("dark");
+        setDark(darkVal ? darkVal === "true" : darkScheme.matches);
+      }
+
+      // listen system
+      darkScheme.addEventListener("change", (event) => {
+        setDark(event.matches);
+      });
+
+      // manual switch
+      const btnDark = document.querySelector(".btn-dark");
+      btnDark.addEventListener("click", () => {
+        setDark(localStorage.getItem("dark") !== "true");
+      });
+    </script>
+    
+    <nav class="flex w-full items-center lg:w-auto">
+      <ul
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://jieyouxu.github.io/blog//projects"
+            >Projects</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://jieyouxu.github.io/blog//archive"
+            >Archive</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://jieyouxu.github.io/blog//tags"
+            >Tags</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://jieyouxu.github.io/blog//about"
+            >About</a
+          >
+        </li>
+        
+      </ul>
+    </nav>
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl break-words px-4 pb-16 pt-32 dark:prose-invert"
+    >
+      
+<article>
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">A ferrisClueless reviewer</h1>
+    <div class="text-sm antialiased opacity-60">
+  
+  <time>2024-06-02</time>
+  <span class="mx-1">&middot;</span>
+  <span>12min</span>
+  <!---->
+  
+  <!---->
+  
+  <span class="mx-1">&middot;</span>
+  <span>jieyouxu</span>
+  
+</div>
+
+  </header>
+
+  
+
+  <!-- TOC -->
+  <!---->
+<div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
+  <details>
+    <summary class="cursor-pointer py-1 pl-4">
+      <span>Table of Contents</span>
+    </summary>
+    <div class="px-2">
+      <ul>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#background"
+            >Background</a
+          >
+          
+          <ul>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#pull-requests-to-rustc-and-code-reviews"
+                >Pull requests to rustc and code reviews</a
+              >
+            </li>
+            
+            <li>
+              <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#what-s-the-t-compiler-review-rotation"
+                >What&#x27;s the T-compiler review rotation?</a
+              >
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#who-dis"
+            >Who dis?</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#joining-the-compiler-review-rotation"
+            >Joining the compiler review rotation</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#what-goes-into-a-compiler-code-review"
+            >What goes into a compiler code review?</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#how-i-try-to-do-code-reviews"
+            >How I (try to) do code reviews</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#what-can-make-a-pr-easier-to-review"
+            >What can make a PR easier to review?</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://jieyouxu.github.io/blog/review-rotation/#aside-the-hot-potato-game"
+            >Aside: the Hot Potato game</a
+          >
+          
+        </li>
+        
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!---->
+
+  <!-- Content -->
+  <section><p>In this post, I describe:</p>
+<ul>
+<li>My experiences being on the Rust compiler <a href="https://github.com/rust-lang/rust"><code>rustc</code></a>'s review rotation for the first time.</li>
+<li>What goes into a compiler code review from my perspective.</li>
+<li>How I (try to) do code reviews.</li>
+<li>What I think PR authors can do to help make the review easier.</li>
+</ul>
+<p>I hope this post can share some insights into how compiler PRs are reviewed :3</p>
+<h2 id="background">Background</h2>
+<h3 id="pull-requests-to-rustc-and-code-reviews">Pull requests to <a href="https://github.com/rust-lang/rust"><code>rustc</code></a> and code reviews</h3>
+<p><a href="https://github.com/rust-lang/rust"><code>rustc</code></a> is maintained by the <a href="https://www.rust-lang.org/governance/teams/compiler">compiler team</a> (&quot;T-compiler&quot;). Pull requests (PRs) to the compiler
+are expected to go through code reviews and requires approval (<code>r+</code>) from an authorized reviewer
+before the changes can be merged to <code>master</code>. Specifically, T-compiler reviewers.</p>
+<h3 id="what-s-the-t-compiler-review-rotation">What's the T-compiler review rotation?</h3>
+<p>The specifics are explained in more details in the <a href="https://github.com/rust-lang/rfcs/pull/3599">re-organize the compiler
+team</a> RFC, but the gist is that T-compiler members who volunteered to be on the
+review rotation will be randomly assigned PRs (or explicitly requested by PR authors or others) to
+review PRs primarily affecting the compiler.</p>
+<h2 id="who-dis">Who dis?</h2>
+<p>I am a <em>very</em> new T-compiler <del>toaster</del> contributor. I was invited to join T-compiler contributors
+approximately <a href="https://github.com/rust-lang/team/pull/1421">two months ago</a> (at the time this blog post was written). I am new
+to the compiler in general: I've only made changes to the compiler in <a href="https://github.com/rust-lang/rust/pulls?q=author%3Ajieyouxu+-label%3Arollup+">random PRs here and
+there</a>. Amusingly, looking through the PR history, many of my contributions to
+<a href="https://github.com/rust-lang/rust">rust-lang/rust</a> are not to the compiler itself (code in <code>compiler/</code>), but to the test
+infrastructure: to the test harness <code>compiletest</code> and to the <code>run-make</code> test suite.</p>
+<h2 id="joining-the-compiler-review-rotation">Joining the compiler review rotation</h2>
+<p>As you can imagine, <a href="https://github.com/rust-lang/rust"><code>rustc</code></a> is a big codebase, and I am not familiar with many parts of the
+compiler. But that's why we have a compiler <em>team</em>: different members on the team are familiar with
+different parts of the compiler.</p>
+<center>
+    <figure>
+        <img src="ferris_clueless.png" width=100px>
+        <figcaption>The `:ferrisClueless:` emote. Taken from the Rust community discord, made by @.foobles.</figcaption>
+    </figure>
+</center>
+<p>I <a href="https://github.com/rust-lang/rust/pull/123509">signed up for the compiler review rotation for the first time</a> <sup class="footnote-reference"><a href="#review-pool">1</a></sup>
+<em>anyway</em> on 2024-04-05 and have since been <a href="https://github.com/rust-lang/rust/pulls?q=is%3Apr+assignee%3Ajieyouxu+">assigned PRs to review</a> (this list is not
+exhaustive because I have reviewed and/or approved PRs that are not assigned to me).</p>
+<p>Having more compiler reviewers on rotation always help to relieve some of the <a href="https://rust-lang.zulipchat.com/#narrow/stream/131828-t-compiler/topic/review.20queue.20.26.20capacity">review capacity
+pressure</a> that the compiler team was having causing long delays in review times for
+compiler PRs (we went from having ~<strong>8</strong> compiler reviewers on rotation to now ~<strong>17</strong>!).</p>
+<p>It's quite overwhelming during the first few assigned PRs, especially because I'm also new to the
+compiler team. Actually, I'm just generally new to reviewing other people's code. We have some
+docs/guidance for review policies and the review procedure, but it's kinda scattered around in a
+couple of places: <a href="https://forge.rust-lang.org/compiler/reviews.html?highlight=review#review-policies">Rust Forge</a>, <a href="https://rustc-dev-guide.rust-lang.org/contributing.html#pull-requests">rustc-dev-guide</a>, in T-compiler
+folklore and presumably in some random HackMD documents somewhere too. It really is a
+learn-as-you-go experience. I try to learn from what other reviewers are doing, such as the
+reviewers assigned to my own PRs.</p>
+<p><em>Fake it till you make it</em>, right? Truly a <code>:ferrisClueless:</code> moment.</p>
+<h2 id="what-goes-into-a-compiler-code-review">What goes into a compiler code review?</h2>
+<p>As a T-compiler reviewer, to successfully (for some metric of &quot;successfully&quot;) review a randomly
+assigned PR, I need to:</p>
+<ul>
+<li>Have some familarity with the infrastructure:
+<ul>
+<li>Being familiar with our two bots, <code>rustbot</code> and <code>bors</code> and being familiar with our CI: try
+jobs <code>@bors try</code>, approvals <code>@bors r+</code>, marking as rollups (or as iffy/never rollup).</li>
+<li>Help the PR authors run try jobs or perf runs if they don't have <code>try</code> or perf permissions; I
+need to make sure that the code that is submitted to try jobs or perf runs do not contain any
+malicious code, because the build artifacts are publicly available.</li>
+</ul>
+</li>
+<li>Determine that I have &quot;<strong>jurisdiction</strong>&quot;: I am only a T-compiler contributor, so I can only
+approve PRs that primarily affect code maintained by T-compiler.
+<ul>
+<li>If the PR is primarily affecting code or other artifacts maintained by another Rust team (you
+can visit <a href="https://www.rust-lang.org/governance">https://www.rust-lang.org/governance</a> to see the various Rust teams), then I'll
+need to pass the hot potato (I like to call reassigning the reviewer <code>r? another_team</code> as
+passing the hot potato) to a more suitable reviewer of the relevant team.</li>
+<li>If the PR affects multiple teams, then I will need to focus on the part of the PR affecting
+the compiler, and determine if I need to also request reviewers from the other teams to review
+parts of the PR affecting the other teams.<sup class="footnote-reference"><a href="#inter-team-review">2</a></sup></li>
+</ul>
+</li>
+<li><strong>Suitability triage</strong>: am I a suitable reviewer for the changes?
+<ul>
+<li>If the PR modifies parts of the compiler I am not familiar with or is very tricky, do I have
+enough confidence in determining the correctness of the changes / am I comfortable enough to
+eventually give an <code>r+</code>?
+<ul>
+<li>If I am not confident initially, am I likely to eventually become sufficiently confident
+as I dig into the relevant parts of the compiler more / consult with other compiler
+contributors?</li>
+<li>Do I have enough time to review the changes? Am I likely to be able to review the PR
+in a reasonable timeframe?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Determine if the changes require any Procedural Things™:
+<ul>
+<li>Does this PR need a ACP/RFC/MCP? If so, from which teams?</li>
+<li>Does the PR need feature gating? Does the PR need (const-) stability attributes?</li>
+</ul>
+</li>
+<li>Determine if the PR can cause any breaking changes or regressions?
+<ul>
+<li>Behavioral changes?</li>
+<li>Does the PR cause existing code to start/stop compiling?</li>
+<li>Does the PR affect any kind of stability?</li>
+<li>Will the lint start linting on new code? Is the lint level suitable? Does the lint changes
+need T-lang approval?</li>
+</ul>
+</li>
+<li>Determine if it's possible that the PR will have (widespread) effects if merged. Does the changes
+need to go through <a href="https://github.com/rust-lang/crater">crater</a>?</li>
+<li>Determine if the PR has sufficient testing.</li>
+<li>Determine if the PR introduce any new dependencies that are not approved.</li>
+<li>File relevant issues or track them elsewhere for problems/suggestions discovered/realized during
+code review, that is suitable to be addressed in follow-up PRs.</li>
+<li>Check if the code is generated by AI and contains nonsense. Yes, we have spam PRs generated by
+various AIs that make no sense when examined.</li>
+</ul>
+<p>A lot of consideration can go into a simple</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">@bors</span><span> r+ rollup
+</span></code></pre>
+<p>I feel like it's hard to come up with useful generically applicable PR review workflows, because
+Every PR is Special™. Anyways, it does get easier as one gains more experience in the review
+workflow and more familiarity with more parts of the compiler. You develop a better &quot;feel&quot; for if
+you can review a given PR as you review more.</p>
+<h2 id="how-i-try-to-do-code-reviews">How I (try to) do code reviews</h2>
+<p>By YOLOing it.</p>
+<p>Okay, maybe not quite that.</p>
+<p>I try to always keep in mind that code reviews are a &quot;we&quot; thing: the PR author and the reviewer works
+<strong>together</strong> to improve the compiler. It's not a &quot;versus&quot; thing.</p>
+<p>I try to:</p>
+<ul>
+<li>Gather and understand the context for why the changes are proposed: relevant issues, discussions,
+PRs, RFC/MCP/ACPs, etc.</li>
+<li>Review changes in a &quot;sandwich&quot; fashion:
+<ol>
+<li>An overall pass to understand at a high level what the general changes are and how they try
+to accomplish the goal of the PR.</li>
+<li>Individual passes for individual commits: how does each commit try to further advance the
+objective?</li>
+<li>Another overall pass to consider if the change details make sense to serve the overall
+purpose.</li>
+</ol>
+</li>
+<li>Ask lots of questions:
+<ul>
+<li>The PR author likely knows more about the specific changes than you do and have more context.</li>
+<li>Some of the answers can become comments in code, in commit messages, which are very useful as
+documentation and not get lost in the PR discussion.</li>
+<li>This helps to avoid shutting down discussion: I don't want to sound assertive when it doesn't
+need to. That discourages PR authors from contributing their own thoughts/suggestions
+(especially new contributors).</li>
+<li>A simple &quot;what do you think?&quot; can be very powerful! It can make the PR author feel that their
+opinion is valued and their input is desired. They of course are, but an explicit question
+like this can make the appreciation itself explicit!</li>
+</ul>
+</li>
+<li>Use <a href="https://conventionalcomments.org/">review comment prefixes</a> to clearly indicate which review comments are blocking
+vs non-blocking: I don't want to block the PR on nits if the PR author has different preferences.</li>
+<li>If there are some changes that makes sense to be addressed in follow-up PRs, then don't block this
+PR.</li>
+<li>Avoid getting bogged down in nits.</li>
+<li>If I think something is wrong, explain <em>why</em> I think it is wrong: it's quite possible that my
+analysis is flawed and it's actually correct!</li>
+<li>If I think there's better ways to do things, try to give some illustrative examples if possible.</li>
+<li>Praise what I like about the PR: appraisal establishes positive feedback loops: it reinforces good
+practices (subject to the reviewer's view on what constitutes good practices) and encourages PR
+authors to come back in the future for more contributions.
+<ul>
+<li>I don't do this often enough and am trying to get better at it. When reviewing, it's easy to
+get tunnel visioned on the potential improvements and problems and neglect what <em>is</em> nice
+about the changes.</li>
+</ul>
+</li>
+<li>If we run into weird issues, or if the PR author has questions that I don't have the answers to, I
+try to help them find an answer: this can involve me acting as a liason and asking other
+contributors who <em>are</em> knowledgable for what the problem might be and if there are suitable
+solutions.</li>
+</ul>
+<h2 id="what-can-make-a-pr-easier-to-review">What can make a PR easier to review?</h2>
+<p>With my reviewer hat on, these things can contribute to making a PR easier for me to review:</p>
+<ul>
+<li><a href="https://www.aleksandrhovhannisyan.com/blog/atomic-git-commits/">Atomic commits</a>: try to make each commit focused on one aspect. For example,
+having one commit making a compiler change, and a follow-up commit that updates/blesses the tests
+can be helpful.
+<ul>
+<li><code>@nnethercote</code>'s PRs are absolutely stellar to learn from: good PR descriptions, commit
+messages and atomic commits, makes it very plesant to review. For example,
+<a href="https://github.com/rust-lang/rust/pull/125815">https://github.com/rust-lang/rust/pull/125815</a>.</li>
+</ul>
+</li>
+<li>It can make sense to have a series of PRs for bigger changes.</li>
+<li>Avoid unrelated changes: it can be tempting to do drive-by cleanups or changes</li>
+<li>After each round of reviews, posting a high-level summary of what changes are made can be very
+helpful. Making review comments as resolved or post a quick reply can be useful to indicate that
+the feedback has been addressed as well.</li>
+<li>Liberal use of <code>@rustbot ready</code>/<code>@rustbot author</code> to indicate to the reviewer that the author
+either intends to make more changes or that the PR is in a state that's ready for another round of
+reviews.</li>
+</ul>
+<h2 id="aside-the-hot-potato-game">Aside: the Hot Potato game</h2>
+<p>Sometimes a PR make changes to more &quot;exotic&quot; parts of the compiler. Like ABI or layout. Or codegen.
+Then, what typically happens is that the first randomly assigned compiler reviewer is not
+comfortable with reviewing the changes, so they reroll with <code>r?</code>.</p>
+<p>Then the second reviewer is also not comfortable with reviewing.</p>
+<p>Then the third.</p>
+<p>And fourth.</p>
+<p>Until eventually we realize the dice has been rolled too many times and ask around on Zulip who's
+willing to take a look.</p>
+<p>The Hot Potato game typically looks like this:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>@author: *makes some ABI/layout/codegen changes*
+</span><span>@rustbot: *randomly assigns `@reviewer_2`*
+</span><span>@reviewer_1: r? compiler
+</span><span>@rustbot: *assigns `@reviewer_2`*
+</span><span>// 1 day later
+</span><span>@reviewer_2: I&#39;m not comfortable reviewing this. r? compiler
+</span><span>@rustbot: *assigns `@reviewer_3`*
+</span><span>// 4 days later
+</span><span>@reviewer_3: Me neither. r? compiler
+</span><span>// 3 days later
+</span><span>@rustbot: *assigns `@reviewer_4`*
+</span><span>@reviewer_4: *opens zulip thread asking who can review this PR*
+</span><span>...
+</span><span>@rustbot: *assigns `@reviewer_n` who can finally review this PR*
+</span></code></pre>
+<p>There's just some extra delays if the hot potato keeps getting passed around, so we should really:</p>
+<ol>
+<li>Identify reviewers who are comfortable with e.g. ABI/layout/codegen, and</li>
+<li>Setup a ping group for experts who reviewers can consult with if they want extra pairs of eyes on
+delicate changes.</li>
+</ol>
+<hr />
+<p>I'm sure I missed plenty of things I could've talked about, but that's what I was able to cook up
+(toast up?) when I was writing this blog post. Thanks for reading if you got this far! I look
+forward to more people (and toasters) joining the compiler review rotation in the future :3</p>
+<hr />
+<p><sup class="footnote-reference"><a href="#review-pool">1</a></sup> Actually, not just for <code>compiler/</code> changes; I also am in the reviewer pool for PRs
+affecting <code>src/tools/run-make-support</code>, <code>tests/run-make</code> and <code>src/tools/compiletest</code>.</p>
+<p><sup class="footnote-reference"><a href="#inter-team-review">2</a></sup> I would love if <code>rustbot</code> has first-class support for supporting a
+multiple-reviewers model, where it is possible to request multiple primary reviewers and require
+joint approval.</p>
+</section>
+
+  <hr />
+
+  <!-- Post Taxonomies -->
+  
+<footer class="mt-12 flex flex-col">
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mb-1.5 mr-1.5 rounded-lg px-5 py-1.5">Tags </span>
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://jieyouxu.github.io/blog/tags/rustc/"
+      >rustc</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://jieyouxu.github.io/blog/tags/code-review/"
+      >code-review</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://jieyouxu.github.io/blog/tags/compiler/"
+      >compiler</a
+    >
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://jieyouxu.github.io/blog/tags/rust/"
+      >rust</a
+    >
+    
+  </div>
+  
+</footer>
+
+<!---->
+
+  <!-- Post Nav -->
+  
+<!---->
+
+  <!-- Comment -->
+  
+</article>
+
+    </main>
+
+    <footer class="mx-auto flex max-w-3xl flex-wrap items-center px-8 py-4 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+    &copy; 2024 -  2024
+    <a class="link" href="https://jieyouxu.github.io/blog"
+      >jieyouxu</a
+    >
+     |<!---->
+    <!---->
+    <a class="link" href="https:&#x2F;&#x2F;creativecommons.org&#x2F;licenses&#x2F;by-sa&#x2F;4.0&#x2F;deed" rel="noopener" target="_blank">
+      CC BY-SA 4.0
+    </a>
+    <!---->
+    
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <a class="link mr-6 lg:ml-6" href="https://www.getzola.org/" rel="noopener" target="_blank"
+      >Powered by Zola</a
+    >
+    <a class="link" href="https://github.com/st1020/kita" rel="noopener" target="_blank">✎ Kita</a>
+  </div>
+</footer>
+
+  </body>
+</html>

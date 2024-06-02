@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Toaster&#x27;s Blog</title>
+    <subtitle>A collection of assorted blog posts written by a toaster</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://jieyouxu.github.io/blog/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://jieyouxu.github.io/blog/"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-06-02T00:00:00+00:00</updated>
+    <id>https://jieyouxu.github.io/blog/atom.xml</id>
+    <entry xml:lang="en">
+        <title>A ferrisClueless reviewer</title>
+        <published>2024-06-02T00:00:00+00:00</published>
+        <updated>2024-06-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              jieyouxu
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jieyouxu.github.io/blog/review-rotation/"/>
+        <id>https://jieyouxu.github.io/blog/review-rotation/</id>
+        
+        <content type="html" xml:base="https://jieyouxu.github.io/blog/review-rotation/">&lt;p&gt;In this post, I describe:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;My experiences being on the Rust compiler &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&quot;&gt;&lt;code&gt;rustc&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&#x27;s review rotation for the first time.&lt;&#x2F;li&gt;
+&lt;li&gt;What goes into a compiler code review from my perspective.&lt;&#x2F;li&gt;
+&lt;li&gt;How I (try to) do code reviews.&lt;&#x2F;li&gt;
+&lt;li&gt;What I think PR authors can do to help make the review easier.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;I hope this post can share some insights into how compiler PRs are reviewed :3&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;background&quot;&gt;Background&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;pull-requests-to-rustc-and-code-reviews&quot;&gt;Pull requests to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&quot;&gt;&lt;code&gt;rustc&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; and code reviews&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&quot;&gt;&lt;code&gt;rustc&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; is maintained by the &lt;a href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;governance&#x2F;teams&#x2F;compiler&quot;&gt;compiler team&lt;&#x2F;a&gt; (&amp;quot;T-compiler&amp;quot;). Pull requests (PRs) to the compiler
+are expected to go through code reviews and requires approval (&lt;code&gt;r+&lt;&#x2F;code&gt;) from an authorized reviewer
+before the changes can be merged to &lt;code&gt;master&lt;&#x2F;code&gt;. Specifically, T-compiler reviewers.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-s-the-t-compiler-review-rotation&quot;&gt;What&#x27;s the T-compiler review rotation?&lt;&#x2F;h3&gt;
+&lt;p&gt;The specifics are explained in more details in the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rfcs&#x2F;pull&#x2F;3599&quot;&gt;re-organize the compiler
+team&lt;&#x2F;a&gt; RFC, but the gist is that T-compiler members who volunteered to be on the
+review rotation will be randomly assigned PRs (or explicitly requested by PR authors or others) to
+review PRs primarily affecting the compiler.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;who-dis&quot;&gt;Who dis?&lt;&#x2F;h2&gt;
+&lt;p&gt;I am a &lt;em&gt;very&lt;&#x2F;em&gt; new T-compiler &lt;del&gt;toaster&lt;&#x2F;del&gt; contributor. I was invited to join T-compiler contributors
+approximately &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;team&#x2F;pull&#x2F;1421&quot;&gt;two months ago&lt;&#x2F;a&gt; (at the time this blog post was written). I am new
+to the compiler in general: I&#x27;ve only made changes to the compiler in &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pulls?q=author%3Ajieyouxu+-label%3Arollup+&quot;&gt;random PRs here and
+there&lt;&#x2F;a&gt;. Amusingly, looking through the PR history, many of my contributions to
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&quot;&gt;rust-lang&#x2F;rust&lt;&#x2F;a&gt; are not to the compiler itself (code in &lt;code&gt;compiler&#x2F;&lt;&#x2F;code&gt;), but to the test
+infrastructure: to the test harness &lt;code&gt;compiletest&lt;&#x2F;code&gt; and to the &lt;code&gt;run-make&lt;&#x2F;code&gt; test suite.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;joining-the-compiler-review-rotation&quot;&gt;Joining the compiler review rotation&lt;&#x2F;h2&gt;
+&lt;p&gt;As you can imagine, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&quot;&gt;&lt;code&gt;rustc&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; is a big codebase, and I am not familiar with many parts of the
+compiler. But that&#x27;s why we have a compiler &lt;em&gt;team&lt;&#x2F;em&gt;: different members on the team are familiar with
+different parts of the compiler.&lt;&#x2F;p&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+        &lt;img src=&quot;ferris_clueless.png&quot; width=100px&gt;
+        &lt;figcaption&gt;The `:ferrisClueless:` emote. Taken from the Rust community discord, made by @.foobles.&lt;&#x2F;figcaption&gt;
+    &lt;&#x2F;figure&gt;
+&lt;&#x2F;center&gt;
+&lt;p&gt;I &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;123509&quot;&gt;signed up for the compiler review rotation for the first time&lt;&#x2F;a&gt; &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#review-pool&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;
+&lt;em&gt;anyway&lt;&#x2F;em&gt; on 2024-04-05 and have since been &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pulls?q=is%3Apr+assignee%3Ajieyouxu+&quot;&gt;assigned PRs to review&lt;&#x2F;a&gt; (this list is not
+exhaustive because I have reviewed and&#x2F;or approved PRs that are not assigned to me).&lt;&#x2F;p&gt;
+&lt;p&gt;Having more compiler reviewers on rotation always help to relieve some of the &lt;a href=&quot;https:&#x2F;&#x2F;rust-lang.zulipchat.com&#x2F;#narrow&#x2F;stream&#x2F;131828-t-compiler&#x2F;topic&#x2F;review.20queue.20.26.20capacity&quot;&gt;review capacity
+pressure&lt;&#x2F;a&gt; that the compiler team was having causing long delays in review times for
+compiler PRs (we went from having ~&lt;strong&gt;8&lt;&#x2F;strong&gt; compiler reviewers on rotation to now ~&lt;strong&gt;17&lt;&#x2F;strong&gt;!).&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s quite overwhelming during the first few assigned PRs, especially because I&#x27;m also new to the
+compiler team. Actually, I&#x27;m just generally new to reviewing other people&#x27;s code. We have some
+docs&#x2F;guidance for review policies and the review procedure, but it&#x27;s kinda scattered around in a
+couple of places: &lt;a href=&quot;https:&#x2F;&#x2F;forge.rust-lang.org&#x2F;compiler&#x2F;reviews.html?highlight=review#review-policies&quot;&gt;Rust Forge&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;rustc-dev-guide.rust-lang.org&#x2F;contributing.html#pull-requests&quot;&gt;rustc-dev-guide&lt;&#x2F;a&gt;, in T-compiler
+folklore and presumably in some random HackMD documents somewhere too. It really is a
+learn-as-you-go experience. I try to learn from what other reviewers are doing, such as the
+reviewers assigned to my own PRs.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Fake it till you make it&lt;&#x2F;em&gt;, right? Truly a &lt;code&gt;:ferrisClueless:&lt;&#x2F;code&gt; moment.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-goes-into-a-compiler-code-review&quot;&gt;What goes into a compiler code review?&lt;&#x2F;h2&gt;
+&lt;p&gt;As a T-compiler reviewer, to successfully (for some metric of &amp;quot;successfully&amp;quot;) review a randomly
+assigned PR, I need to:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Have some familarity with the infrastructure:
+&lt;ul&gt;
+&lt;li&gt;Being familiar with our two bots, &lt;code&gt;rustbot&lt;&#x2F;code&gt; and &lt;code&gt;bors&lt;&#x2F;code&gt; and being familiar with our CI: try
+jobs &lt;code&gt;@bors try&lt;&#x2F;code&gt;, approvals &lt;code&gt;@bors r+&lt;&#x2F;code&gt;, marking as rollups (or as iffy&#x2F;never rollup).&lt;&#x2F;li&gt;
+&lt;li&gt;Help the PR authors run try jobs or perf runs if they don&#x27;t have &lt;code&gt;try&lt;&#x2F;code&gt; or perf permissions; I
+need to make sure that the code that is submitted to try jobs or perf runs do not contain any
+malicious code, because the build artifacts are publicly available.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Determine that I have &amp;quot;&lt;strong&gt;jurisdiction&lt;&#x2F;strong&gt;&amp;quot;: I am only a T-compiler contributor, so I can only
+approve PRs that primarily affect code maintained by T-compiler.
+&lt;ul&gt;
+&lt;li&gt;If the PR is primarily affecting code or other artifacts maintained by another Rust team (you
+can visit &lt;a href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;governance&quot;&gt;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;governance&lt;&#x2F;a&gt; to see the various Rust teams), then I&#x27;ll
+need to pass the hot potato (I like to call reassigning the reviewer &lt;code&gt;r? another_team&lt;&#x2F;code&gt; as
+passing the hot potato) to a more suitable reviewer of the relevant team.&lt;&#x2F;li&gt;
+&lt;li&gt;If the PR affects multiple teams, then I will need to focus on the part of the PR affecting
+the compiler, and determine if I need to also request reviewers from the other teams to review
+parts of the PR affecting the other teams.&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#inter-team-review&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Suitability triage&lt;&#x2F;strong&gt;: am I a suitable reviewer for the changes?
+&lt;ul&gt;
+&lt;li&gt;If the PR modifies parts of the compiler I am not familiar with or is very tricky, do I have
+enough confidence in determining the correctness of the changes &#x2F; am I comfortable enough to
+eventually give an &lt;code&gt;r+&lt;&#x2F;code&gt;?
+&lt;ul&gt;
+&lt;li&gt;If I am not confident initially, am I likely to eventually become sufficiently confident
+as I dig into the relevant parts of the compiler more &#x2F; consult with other compiler
+contributors?&lt;&#x2F;li&gt;
+&lt;li&gt;Do I have enough time to review the changes? Am I likely to be able to review the PR
+in a reasonable timeframe?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Determine if the changes require any Procedural Things™:
+&lt;ul&gt;
+&lt;li&gt;Does this PR need a ACP&#x2F;RFC&#x2F;MCP? If so, from which teams?&lt;&#x2F;li&gt;
+&lt;li&gt;Does the PR need feature gating? Does the PR need (const-) stability attributes?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Determine if the PR can cause any breaking changes or regressions?
+&lt;ul&gt;
+&lt;li&gt;Behavioral changes?&lt;&#x2F;li&gt;
+&lt;li&gt;Does the PR cause existing code to start&#x2F;stop compiling?&lt;&#x2F;li&gt;
+&lt;li&gt;Does the PR affect any kind of stability?&lt;&#x2F;li&gt;
+&lt;li&gt;Will the lint start linting on new code? Is the lint level suitable? Does the lint changes
+need T-lang approval?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Determine if it&#x27;s possible that the PR will have (widespread) effects if merged. Does the changes
+need to go through &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;crater&quot;&gt;crater&lt;&#x2F;a&gt;?&lt;&#x2F;li&gt;
+&lt;li&gt;Determine if the PR has sufficient testing.&lt;&#x2F;li&gt;
+&lt;li&gt;Determine if the PR introduce any new dependencies that are not approved.&lt;&#x2F;li&gt;
+&lt;li&gt;File relevant issues or track them elsewhere for problems&#x2F;suggestions discovered&#x2F;realized during
+code review, that is suitable to be addressed in follow-up PRs.&lt;&#x2F;li&gt;
+&lt;li&gt;Check if the code is generated by AI and contains nonsense. Yes, we have spam PRs generated by
+various AIs that make no sense when examined.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;A lot of consideration can go into a simple&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;@bors&lt;&#x2F;span&gt;&lt;span&gt; r+ rollup
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I feel like it&#x27;s hard to come up with useful generically applicable PR review workflows, because
+Every PR is Special™. Anyways, it does get easier as one gains more experience in the review
+workflow and more familiarity with more parts of the compiler. You develop a better &amp;quot;feel&amp;quot; for if
+you can review a given PR as you review more.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-i-try-to-do-code-reviews&quot;&gt;How I (try to) do code reviews&lt;&#x2F;h2&gt;
+&lt;p&gt;By YOLOing it.&lt;&#x2F;p&gt;
+&lt;p&gt;Okay, maybe not quite that.&lt;&#x2F;p&gt;
+&lt;p&gt;I try to always keep in mind that code reviews are a &amp;quot;we&amp;quot; thing: the PR author and the reviewer works
+&lt;strong&gt;together&lt;&#x2F;strong&gt; to improve the compiler. It&#x27;s not a &amp;quot;versus&amp;quot; thing.&lt;&#x2F;p&gt;
+&lt;p&gt;I try to:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Gather and understand the context for why the changes are proposed: relevant issues, discussions,
+PRs, RFC&#x2F;MCP&#x2F;ACPs, etc.&lt;&#x2F;li&gt;
+&lt;li&gt;Review changes in a &amp;quot;sandwich&amp;quot; fashion:
+&lt;ol&gt;
+&lt;li&gt;An overall pass to understand at a high level what the general changes are and how they try
+to accomplish the goal of the PR.&lt;&#x2F;li&gt;
+&lt;li&gt;Individual passes for individual commits: how does each commit try to further advance the
+objective?&lt;&#x2F;li&gt;
+&lt;li&gt;Another overall pass to consider if the change details make sense to serve the overall
+purpose.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Ask lots of questions:
+&lt;ul&gt;
+&lt;li&gt;The PR author likely knows more about the specific changes than you do and have more context.&lt;&#x2F;li&gt;
+&lt;li&gt;Some of the answers can become comments in code, in commit messages, which are very useful as
+documentation and not get lost in the PR discussion.&lt;&#x2F;li&gt;
+&lt;li&gt;This helps to avoid shutting down discussion: I don&#x27;t want to sound assertive when it doesn&#x27;t
+need to. That discourages PR authors from contributing their own thoughts&#x2F;suggestions
+(especially new contributors).&lt;&#x2F;li&gt;
+&lt;li&gt;A simple &amp;quot;what do you think?&amp;quot; can be very powerful! It can make the PR author feel that their
+opinion is valued and their input is desired. They of course are, but an explicit question
+like this can make the appreciation itself explicit!&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Use &lt;a href=&quot;https:&#x2F;&#x2F;conventionalcomments.org&#x2F;&quot;&gt;review comment prefixes&lt;&#x2F;a&gt; to clearly indicate which review comments are blocking
+vs non-blocking: I don&#x27;t want to block the PR on nits if the PR author has different preferences.&lt;&#x2F;li&gt;
+&lt;li&gt;If there are some changes that makes sense to be addressed in follow-up PRs, then don&#x27;t block this
+PR.&lt;&#x2F;li&gt;
+&lt;li&gt;Avoid getting bogged down in nits.&lt;&#x2F;li&gt;
+&lt;li&gt;If I think something is wrong, explain &lt;em&gt;why&lt;&#x2F;em&gt; I think it is wrong: it&#x27;s quite possible that my
+analysis is flawed and it&#x27;s actually correct!&lt;&#x2F;li&gt;
+&lt;li&gt;If I think there&#x27;s better ways to do things, try to give some illustrative examples if possible.&lt;&#x2F;li&gt;
+&lt;li&gt;Praise what I like about the PR: appraisal establishes positive feedback loops: it reinforces good
+practices (subject to the reviewer&#x27;s view on what constitutes good practices) and encourages PR
+authors to come back in the future for more contributions.
+&lt;ul&gt;
+&lt;li&gt;I don&#x27;t do this often enough and am trying to get better at it. When reviewing, it&#x27;s easy to
+get tunnel visioned on the potential improvements and problems and neglect what &lt;em&gt;is&lt;&#x2F;em&gt; nice
+about the changes.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;If we run into weird issues, or if the PR author has questions that I don&#x27;t have the answers to, I
+try to help them find an answer: this can involve me acting as a liason and asking other
+contributors who &lt;em&gt;are&lt;&#x2F;em&gt; knowledgable for what the problem might be and if there are suitable
+solutions.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;what-can-make-a-pr-easier-to-review&quot;&gt;What can make a PR easier to review?&lt;&#x2F;h2&gt;
+&lt;p&gt;With my reviewer hat on, these things can contribute to making a PR easier for me to review:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.aleksandrhovhannisyan.com&#x2F;blog&#x2F;atomic-git-commits&#x2F;&quot;&gt;Atomic commits&lt;&#x2F;a&gt;: try to make each commit focused on one aspect. For example,
+having one commit making a compiler change, and a follow-up commit that updates&#x2F;blesses the tests
+can be helpful.
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@nnethercote&lt;&#x2F;code&gt;&#x27;s PRs are absolutely stellar to learn from: good PR descriptions, commit
+messages and atomic commits, makes it very plesant to review. For example,
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;125815&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;125815&lt;&#x2F;a&gt;.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;It can make sense to have a series of PRs for bigger changes.&lt;&#x2F;li&gt;
+&lt;li&gt;Avoid unrelated changes: it can be tempting to do drive-by cleanups or changes&lt;&#x2F;li&gt;
+&lt;li&gt;After each round of reviews, posting a high-level summary of what changes are made can be very
+helpful. Making review comments as resolved or post a quick reply can be useful to indicate that
+the feedback has been addressed as well.&lt;&#x2F;li&gt;
+&lt;li&gt;Liberal use of &lt;code&gt;@rustbot ready&lt;&#x2F;code&gt;&#x2F;&lt;code&gt;@rustbot author&lt;&#x2F;code&gt; to indicate to the reviewer that the author
+either intends to make more changes or that the PR is in a state that&#x27;s ready for another round of
+reviews.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;aside-the-hot-potato-game&quot;&gt;Aside: the Hot Potato game&lt;&#x2F;h2&gt;
+&lt;p&gt;Sometimes a PR make changes to more &amp;quot;exotic&amp;quot; parts of the compiler. Like ABI or layout. Or codegen.
+Then, what typically happens is that the first randomly assigned compiler reviewer is not
+comfortable with reviewing the changes, so they reroll with &lt;code&gt;r?&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Then the second reviewer is also not comfortable with reviewing.&lt;&#x2F;p&gt;
+&lt;p&gt;Then the third.&lt;&#x2F;p&gt;
+&lt;p&gt;And fourth.&lt;&#x2F;p&gt;
+&lt;p&gt;Until eventually we realize the dice has been rolled too many times and ask around on Zulip who&#x27;s
+willing to take a look.&lt;&#x2F;p&gt;
+&lt;p&gt;The Hot Potato game typically looks like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;@author: *makes some ABI&#x2F;layout&#x2F;codegen changes*
+&lt;&#x2F;span&gt;&lt;span&gt;@rustbot: *randomly assigns `@reviewer_2`*
+&lt;&#x2F;span&gt;&lt;span&gt;@reviewer_1: r? compiler
+&lt;&#x2F;span&gt;&lt;span&gt;@rustbot: *assigns `@reviewer_2`*
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; 1 day later
+&lt;&#x2F;span&gt;&lt;span&gt;@reviewer_2: I&amp;#39;m not comfortable reviewing this. r? compiler
+&lt;&#x2F;span&gt;&lt;span&gt;@rustbot: *assigns `@reviewer_3`*
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; 4 days later
+&lt;&#x2F;span&gt;&lt;span&gt;@reviewer_3: Me neither. r? compiler
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; 3 days later
+&lt;&#x2F;span&gt;&lt;span&gt;@rustbot: *assigns `@reviewer_4`*
+&lt;&#x2F;span&gt;&lt;span&gt;@reviewer_4: *opens zulip thread asking who can review this PR*
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;@rustbot: *assigns `@reviewer_n` who can finally review this PR*
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;There&#x27;s just some extra delays if the hot potato keeps getting passed around, so we should really:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Identify reviewers who are comfortable with e.g. ABI&#x2F;layout&#x2F;codegen, and&lt;&#x2F;li&gt;
+&lt;li&gt;Setup a ping group for experts who reviewers can consult with if they want extra pairs of eyes on
+delicate changes.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;I&#x27;m sure I missed plenty of things I could&#x27;ve talked about, but that&#x27;s what I was able to cook up
+(toast up?) when I was writing this blog post. Thanks for reading if you got this far! I look
+forward to more people (and toasters) joining the compiler review rotation in the future :3&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#review-pool&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt; Actually, not just for &lt;code&gt;compiler&#x2F;&lt;&#x2F;code&gt; changes; I also am in the reviewer pool for PRs
+affecting &lt;code&gt;src&#x2F;tools&#x2F;run-make-support&lt;&#x2F;code&gt;, &lt;code&gt;tests&#x2F;run-make&lt;&#x2F;code&gt; and &lt;code&gt;src&#x2F;tools&#x2F;compiletest&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#inter-team-review&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt; I would love if &lt;code&gt;rustbot&lt;&#x2F;code&gt; has first-class support for supporting a
+multiple-reviewers model, where it is possible to request multiple primary reviewers and require
+joint approval.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
