@@ -19,11 +19,7 @@ highlight_code = true
 list_pages = true
 add_toc = true
 header_nav = [
-    { name = "~home", url = "/" },
+    { name = "Toaster's blog", url = "#" },
+    { name = "~home", url = "/blog/" },
     { name = "@jieyouxu", url = "https://github.com/jieyouxu", new_tab=true },
-]
-footer_nav = [
-    { name = "< previous", url = "#" },
-    { name = "meow", url = "#" },
-    { name = "next >", url = "#" },
 ]
