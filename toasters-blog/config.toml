@@ -1,0 +1,29 @@
+# The URL the site will be built for
+base_url = "https://jieyouxu.github.io/blog/"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = true
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = true
+
+# From <https://www.getzola.org/themes/no-style-please/>.
+theme = "no-style-please"
+
+[markdown]
+# Whether to do syntax highlighting
+# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+highlight_code = true
+
+[extra]
+list_pages = true
+add_toc = true
+header_nav = [
+    { name = "~home", url = "/" },
+    { name = "@jieyouxu", url = "https://github.com/jieyouxu", new_tab=true },
+]
+footer_nav = [
+    { name = "< previous", url = "#" },
+    { name = "meow", url = "#" },
+    { name = "next >", url = "#" },
+]

@@ -1,0 +1,3 @@
+[submodule "toasters-blog/themes/no-style-please"]
+	path = toasters-blog/themes/no-style-please
+	url = https://gitlab.com/4bcx/no-style-please.git
