@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+        <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+
+        
+        
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+        
+        
+
+        <title>Contributions to Rust in 2025</title>
+        
+        <meta name="title" content="Contributions to Rust in 2025">
+        
+        <meta name="description" content="Contributions to Rust in 2025">
+        <meta name="generator" content="Zola v0.16.1">
+
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://jieyouxu.github.io/blog/rust-contribs-2025/">
+        <meta property="og:site_name" content="">
+        <meta property="og:title" content="Contributions to Rust in 2025">
+        <meta property="og:description" content="Contributions to Rust in 2025">
+        
+
+        
+        
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://jieyouxu.github.io/blog/rust-contribs-2025/">
+        <meta property="twitter:title" content="Contributions to Rust in 2025">
+        <meta property="twitter:description" content="Contributions to Rust in 2025">
+        
+        
+        
+        <link rel="canonical" href="https://jieyouxu.github.io/blog/rust-contribs-2025/">
+        
+        <script type="application/ld+json">
+            {
+                "description":"Contributions to Rust in 2025",
+                "url":"https://jieyouxu.github.io/blog/rust-contribs-2025/",
+                "@type":"WebSite",
+                "headline":"Contributions to Rust in 2025",
+                "name":"Contributions to Rust in 2025",
+                
+                "@context":"https://schema.org"
+            }
+        </script>
+        
+        
+        
+        <link rel="stylesheet" href="https://jieyouxu.github.io/blog/style.css"/>
+        
+    </head>
+    <body theme="auto">
+        <div class="w">
+            <header>
+                
+                <nav>
+                    
+                    <a href="#" >Toaster&#x27;s blog</a>
+                    
+                    <a href="/blog/" >~home</a>
+                    
+                    <a href="https://github.com/jieyouxu" target="_blank" rel="noreferrer noopener">@jieyouxu</a>
+                    
+                </nav>
+                
+                
+<p><a href="..">..</a>/rust-contribs-2025</p>
+<p class="post-meta"><time datetime="2026-01-08">2026-01-08</time></p>
+<h1>Contributions to Rust in 2025</h1>
+
+            </header>
+            <main class="page-content" aria-label="Content">
+                
+
+
+
+<p>I saw other Rust maintainers posting their contributions in 2025, so I thought
+why not join the party :)</p>
+<h1 id="prs-authored">PRs authored</h1>
+<p><a href="https://github.com/issues?q=author%3Ajieyouxu%20is%3Amerged%20merged%3A2025-01-01..2025-12-31%20org%3Arust-lang%20-label%3Arollup">261 PRs to various <code>rust-lang/</code>
+repos</a></p>
+<p>You can use queries like</p>
+<pre data-lang="text" style="background-color:#2b303b;color:#c0c5ce;" class="language-text "><code class="language-text" data-lang="text"><span>author:jieyouxu is:merged merged:2025-01-01..2025-12-31 org:rust-lang -label:rollup
+</span></code></pre>
+<p>on the <a href="https://github.com/issues">https://github.com/issues</a> page to look up your own contributions to
+various repositories within 2025.</p>
+<h1 id="prs-reviewed">PRs reviewed</h1>
+<p><a href="https://github.com/issues?q=assignee%3Ajieyouxu%20is%3Amerged%20merged%3A2025-01-01..2025-12-31%20org%3Arust-lang">Approximately 680 <code>rust-lang/</code> PRs reviewed</a><sup class="footnote-reference"><a href="#review-note">1</a></sup></p>
+<pre data-lang="text" style="background-color:#2b303b;color:#c0c5ce;" class="language-text "><code class="language-text" data-lang="text"><span>assignee:jieyouxu is:merged merged:2025-01-01..2025-12-31 org:rust-lang
+</span></code></pre>
+<h1 id="summary">Summary</h1>
+<p>I do <code>$random_contributions</code> around the Rust project, based on <code>$vibes</code><sup class="footnote-reference"><a href="#vibes">2</a></sup>.
+My style of contribution is probably most accurately described as &quot;efforts
+towards enabling other contributors&quot;, since I mostly work on the test
+infrastructure (<code>compiletest</code> and friends), the build system (<code>bootstrap</code>), and
+the <code>rust-lang/rust</code> CI. I guess I'm also involved in a lot of firefighting,
+from CI problems to compiler beta regressions. And your usual maintenance
+activities, like triaging, reviewing release notes, prioritizing regressions,
+updating contribution docs, etc.</p>
+<p>During this year I became employed full-time, and so I contribute during my free
+time, which means I have less bandwidth than I used to. My contributions mostly
+then manifests in helping with review bandwidth around the compiler, bootstrap
+and infra parts of the Rust project, among <a href="https://rust-lang.org/governance/people/jieyouxu/">other
+things</a>.</p>
+<p>If I had to summarize, my main contributions would be:</p>
+<ul>
+<li>Getting rid of the <code>Makefile</code>-based <code>tests/run-make</code> test infra, in favor of <a href="https://github.com/rust-lang/rust/pull/136581">plain Rust test programs</a>.</li>
+<li><a href="https://github.com/rust-lang/rust"><code>rust-lang/rust</code></a> CI firefighting. E.g. <a href="https://github.com/rust-lang/rust/pull/137788">(1)</a> <a href="https://github.com/rust-lang/cargo/pull/15245">(2)</a> <a href="https://github.com/rust-lang/rust/pull/138690/">(3)</a> <a href="https://github.com/rust-lang/rust/pull/141023">(4)</a>, etc.</li>
+<li>Helped with the <a href="https://blog.rust-lang.org/inside-rust/2025/05/29/redesigning-the-initial-bootstrap-sequence/"><code>bootstrap</code> stage 0 sequence
+redesign</a>
+efforts and follow-up fixes to get it over the line.</li>
+<li>A bunch of <code>compiletest</code> (test infra) related fixes/cleanups.</li>
+</ul>
+<h1 id="thoughts">Thoughts?</h1>
+<ul>
+<li>There are way more stuff I would like to work on than I have time for, and
+said list of things keep on growing. I keep getting distracted while being
+already distracted<sup class="footnote-reference"><a href="#distracted">3</a></sup>.</li>
+<li>Current full-time <code>$job</code> + free-time OSS contribution model probably works
+best for me, even though I am very glad to see initiatives like the <a href="https://rustfoundation.org/media/announcing-the-rust-foundation-maintainers-fund/">Rust
+Foundation Maintainers
+Fund</a>
+to better support other maintainers. Reason is simple: I would like my hobby
+to remain my hobby, and turning it into a job risks taking away some of the
+fun.</li>
+<li>It's fun to interact with other maintainers from all around the world :)</li>
+</ul>
+<hr />
+<div class="footnote-definition" id="review-note"><sup class="footnote-definition-label">1</sup>
+<p>At least in <code>rust-lang/rust</code>, the PR assignee is not necessarily
+the reviewer(s) (the bors <code>r+</code> approval statistics would probably be more
+accurate.)</p>
+</div>
+<div class="footnote-definition" id="vibes"><sup class="footnote-definition-label">2</sup>
+<p>E.g. day of week, temperature during the morning, or you know, if I
+feel like it.</p>
+</div>
+<div class="footnote-definition" id="distracted"><sup class="footnote-definition-label">3</sup>
+<p>You can tell from my contributions already :D</p>
+</div>
+
+
+            </main>
+            <footer>
+                
+<p class="taxonomies">
+
+</p>
+
+                
+            </footer>
+        </div>
+    </body>
+</html>
+        
