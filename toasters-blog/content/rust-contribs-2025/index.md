@@ -9,7 +9,8 @@ why not join the party :)
 
 # PRs authored
 
-[261 PRs to various `rust-lang/` repos](https://github.com/issues?q=author%3Ajieyouxu%20is%3Amerged%20merged%3A2025-01-01..2025-12-31%20org%3Arust-lang%20-label%3Arollup)[^tip]
+[261 PRs to various `rust-lang/`
+repos](https://github.com/issues?q=author%3Ajieyouxu%20is%3Amerged%20merged%3A2025-01-01..2025-12-31%20org%3Arust-lang%20-label%3Arollup)
 
 You can use queries like
 
