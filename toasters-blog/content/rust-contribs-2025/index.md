@@ -71,6 +71,8 @@ If I had to summarize, my main contributions would be:
 [^review-note]: At least in `rust-lang/rust`, the PR assignee is not necessarily
     the reviewer(s) (the bors `r+` approval statistics would probably be more
     accurate.)
+
 [^vibes]: E.g. day of week, temperature during the morning, or you know, if I
     feel like it.
+
 [^distracted]: You can tell from my contributions already :D
