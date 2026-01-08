@@ -50,6 +50,9 @@ If I had to summarize, my main contributions would be:
 
 - Getting rid of the `Makefile`-based `tests/run-make` test infra, in favor of [plain Rust test programs](https://github.com/rust-lang/rust/pull/136581).
 - [`rust-lang/rust`](https://github.com/rust-lang/rust) CI firefighting. E.g. [(1)](https://github.com/rust-lang/rust/pull/137788) [(2)](https://github.com/rust-lang/cargo/pull/15245) [(3)](https://github.com/rust-lang/rust/pull/138690/) [(4)](https://github.com/rust-lang/rust/pull/141023), etc.
+- Helped with the [`bootstrap` stage 0 sequence
+  redesign](https://blog.rust-lang.org/inside-rust/2025/05/29/redesigning-the-initial-bootstrap-sequence/)
+  efforts and follow-up fixes to get it over the line.
 - A bunch of `compiletest` (test infra) related fixes/cleanups.
 
 # Thoughts?
